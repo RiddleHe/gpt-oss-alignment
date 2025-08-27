@@ -57,7 +57,7 @@ ids = tokenizer(prompt, return_tensors="pt").input_ids.to(model.device)
 prompt_len = len(ids[0])
 
 BEST_LAYER = layer
-vector = steering_vectors[BEST_LAYER].squeeze(0).to(model.device) # (hidden,)
+vector = steering_vectors[BEST_LAYER].to(model.device) # (hidden,)
 layers = model.model.layers
 
 # MoE routing capture buffers
@@ -75,7 +75,6 @@ else:
 
 attn_patterns_base = []
 attn_patterns_steered = []
-
 
 if method == "layer":
     STRENGTH = 1.85
@@ -185,7 +184,6 @@ elif method == "logit":
 
         if step == visualize_step:
             attn_hook_steered.remove()
-            attn_head_hook.remove()
             attn_base = attn_patterns_base[0].mean(0) # avg over heads
             attn_steered = attn_patterns_steered[0].mean(0)
 

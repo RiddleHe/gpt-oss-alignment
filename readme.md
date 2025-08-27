@@ -41,9 +41,9 @@ python find_vector.py
 python compute_vector_diff.py
 python steer_model.py \
     --method "layer|logit" \
-    --decay "none|linear|cosine" \
     --layer <attack_layer> \
     --visualize_step <step_to_visualize_attention_scores> 
+python analyze_vectors.py 
 ```
 
 Enjoy!

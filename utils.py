@@ -173,3 +173,27 @@ def plot_attention_heads(norm_per_head, mean_norm, std_norm, layer_idx, step, no
     plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
     
     plt.savefig(f"visualizations/attention_head_{norm_type}s_layer_{layer_idx}_step_{step}.png", dpi=300)
+
+def plot_attention_heatmap(heatmap_data, layer_idx_start):
+    fig, ax = plt.subplots(figsize=(6, 10))
+    im = ax.imshow(heatmap_data, aspect='auto', cmap='hot', interpolation='nearest')
+
+    ax.set_xticks(range(heatmap_data.shape[1]))
+    ax.set_xticklabels([f'{i}' for i in range(heatmap_data.shape[1])])
+
+    ax.set_yticks(range(len(heatmap_data)))
+    ax.set_yticklabels([f'Layer {layer_idx_start + i + 1}' for i in range(len(heatmap_data))])
+
+    ax.set_xlabel('KV Head Index')
+    ax.set_ylabel('Layer Index')
+    ax.set_title('KV Head Activations Norms')
+
+    plt.colorbar(im, ax=ax, label='Norm')
+
+    ax.set_xticks(np.arange(heatmap_data.shape[1]) - 0.5, minor=True)
+    ax.set_yticks(np.arange(len(heatmap_data)) - 0.5, minor=True)
+
+    ax.grid(which='minor', color='gray', linestyle='-', linewidth=0.5)
+    
+    plt.tight_layout()
+    plt.savefig(f"visualizations/kv_head_activations_heatmap.png", dpi=300)
