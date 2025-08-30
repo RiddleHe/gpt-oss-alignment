@@ -1,20 +1,20 @@
+import argparse
+import json
+import numpy as np
+
+import matplotlib.pyplot as plt
 import torch
 import torch.nn.functional as F
+from tqdm import tqdm
 from transformers import (
     AutoModelForCausalLM, AutoTokenizer, TopPLogitsWarper, TemperatureLogitsWarper,
 )
-from tqdm import tqdm
-import argparse
-import numpy as np
-import matplotlib.pyplot as plt
-import json
 
-from utils import plot_attention_diff, plot_attention_heads,plot_moe_switch_curves, plot_moe_topk_heatmap, plot_moe_usage_hist, compute_moe_stats, decode_step_token
 from hooks import (
     create_steering_hook, capture_attn_hook, capture_attn_head_hook,
     get_moe_handles, create_moe_capture_hook
 )
-
+from utils import plot_attention_diff, plot_attention_heads,plot_moe_delta_usage,compute_moe_stats,plot_moe_sankey_plotly, decode_step_token
 
 def get_args():
     p = argparse.ArgumentParser()
@@ -218,10 +218,12 @@ elif method == "logit":
             print(f"[MoE] Most switching step: t={stats['most_switch_step']}, "
                 f"token={repr(tok_str)}, Jaccard={stats['jaccard'][stats['most_switch_step']]:.3f}, "
                 f"top1_switch={stats['switch_top1'][stats['most_switch_step']]}")
-
-        plot_moe_usage_hist(stats["usage_base"], stats["usage_steer"], layer_idx=BEST_LAYER)
-        plot_moe_switch_curves(stats["switch_top1"], stats["jaccard"], layer_idx=BEST_LAYER)
-        plot_moe_topk_heatmap(moe_obs_base, moe_obs_steered, num_experts=stats["num_experts"], layer_idx=BEST_LAYER)
+   
+        plot_moe_delta_usage(stats["usage_base"], stats["usage_steer"], BEST_LAYER, top_n=None)
+        plot_moe_sankey_plotly(
+            moe_obs_base, moe_obs_steered, num_experts, layer_idx=BEST_LAYER,
+            top_n=None, min_frac=0.01, normalize_rows=False
+        )
 
         save_stats_path = f"activations/{model_id.split('/')[-1]}_moe_stats_layer_{layer}_step_{visualize_step}_method_{method}_decay_{decay}.json"
         with open(save_stats_path, "w") as f:
