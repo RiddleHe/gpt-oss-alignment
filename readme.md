@@ -38,10 +38,24 @@ cd steering_vector
 python find_vector.py
 python compute_vector_diff.py
 python steer_model.py \
-    --method "layer|logit" \
-    --layer <attack_layer> \
-    --visualize_step <step_to_visualize_attention_scores> 
+    --layer [19] \
+    --visualize_step [10]
 python analyze_vectors.py 
+```
+
+## Sparse autoencoder
+We want to train and eval a full SAE on the mysterious layer 19 (which jailbreaks gpt-oss) to extract the most evil features.
+
+The model code is taken from openai's sparse_autoencoder repo and the training / eval is built from scratch.
+
+### Code
+
+To begin training on a `data_dir` of a single .pt with stacked activation vectors, do:
+
+```
+cd sae
+python train_sae.py [config.yaml]
+python eval.py [model_path.pt] [vector.pt]
 ```
 
 Enjoy!
