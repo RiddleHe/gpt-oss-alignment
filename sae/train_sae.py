@@ -109,7 +109,9 @@ def main():
 
     if config.output_dir:
         Path(config.output_dir).mkdir(parents=True, exist_ok=True)
-        torch.save(model.state_dict(), f"{config.output_dir}/model.pt")
+        state_dict = model.state_dict()
+        state_dict = {k: v for k, v in state_dict.items() if k not in ['activation.k', 'activation.postact_fn']}
+        torch.save(state_dict, f"{config.output_dir}/model.pt")
         print(f"Saved model to {config.output_dir}")
 
 if __name__ == "__main__":

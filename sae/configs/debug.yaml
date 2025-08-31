@@ -4,6 +4,6 @@ k: 8
 max_steps: 500
 lr: 0.001
 batch_size: 1
-data_dir: "./data/debug/diff_vectors.pt"
+data_dir: "./data/debug/diff_vector_layer_19.pt"
 max_samples: 1
 output_dir: "./debug_checkpoints"
