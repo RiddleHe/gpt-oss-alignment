@@ -19,6 +19,7 @@ uv pip install -r requirements.txt
 ### Sample from vLLM
 
 ```
+cd notebooks
 bash vllm.sh
 # then play with sample_gpt.ipynb
 ```
@@ -33,6 +34,7 @@ I will make these scripts more production grade in the coming days.
 
 ```
 export CUDA_VISIBLE_DEVICES=[your device] # most stable on single device
+cd steering_vector
 python find_vector.py
 python compute_vector_diff.py
 python steer_model.py \
