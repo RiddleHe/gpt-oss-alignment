@@ -1,5 +1,4 @@
 *.pt
-*.txt
 __pycache__
 
 kaggle/

@@ -13,11 +13,7 @@ conda install -c conda-forge libstdcxx-ng -y
 
 pip install uv
     
-uv pip install --pre vllm==0.10.1+gptoss \
-    --extra-index-url https://wheels.vllm.ai/gpt-oss/ \
-    --extra-index-url https://download.pytorch.org/whl/nightly/cu128 \
-    --index-strategy unsafe-best-match
-uv pip install openai --upgrade
+uv pip install -r requirements.txt
 ```
 
 ### Sample from vLLM
